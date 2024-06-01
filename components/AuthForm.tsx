@@ -38,39 +38,39 @@ const AuthForm = ({ type }: { type: string }) => {
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
         defaultValues: {
-
+          
         },
-    })
-
+      })
     // 2. Define a submit handler.
-    const onSubmit = async(data: z.infer<typeof formSchema>) => {
-        
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsLoading(true);
+  
         
 
         try {
             // Sign up with Appwrite & create plain link token
 
-            if(type === 'sign-up'){
-                const newUser = await signUp(data);
-
+            if(type === 'sign-up') {     
+                const newUser = await signUp(data);     
                 setUser(newUser);
-            }if(type === 'sign-in'){
-                // const response = await signIn({
-                //     email: data.email,
-                //     password: data.password,
-                // })
-                // if(response) router.push('/')
+              }
+      
+              if(type === 'sign-in') {
+                const response = await signIn({
+                  email: data.email,
+                  password: data.password,
+                })
+      
+                if(response) router.push('/')
+              }
+            } catch (error) {
+              console.log(error);
+            } finally {
+              setIsLoading(false);
             }
-        } catch (error) {
-            console.log(error);
-            
-        } finally{
-            setIsLoading(false);
-        }
-    }
-
+          }
 
 
     return (
